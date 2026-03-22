@@ -10,7 +10,7 @@ import salome
 salome.salome_init()
 import salome_notebook
 notebook = salome_notebook.NoteBook()
-sys.path.insert(0, r'/home/empathy/workstation/projects/project_academic/shengyan_shang1/geometry')
+sys.path.insert(0, r'/home/geometry')
 
 ###
 ### GEOM component
