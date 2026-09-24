@@ -605,7 +605,7 @@ with tab_heat:
 ! Mathematical Formulation:
 ! G(r; alpha) = exp(-2 * r^2 / alpha^2)
 ! t_pulse_on = MOD(t, 1.0 / f_rep) < tau_pulse
-! phi_harmonic(t) = SUM_{k=1,3,5} [ sin(k * 2 * PI * f_rep * t + phi_shift) / k ]
+! phi_harmonic(t) = SUM_{{k=1,3,5}} [ sin(k * 2 * PI * f_rep * t + phi_shift) / k ]
 ! P_avg = Energy * f_rep  (Energy is in Joules)
 ! P_effective = 2 * P_avg * (R_ball / alpha)^2
 ! C = 2 * P_effective / (PI * R_ball^2)
@@ -1639,7 +1639,11 @@ FUNCTION getSpecificEnthalpy(model, n, temp) RESULT(enthalpy)
 
   linear_term = beta1 * temp
   max_val = temp - T0
-  phase_term = beta2 * max_val IF (max_val > 0.0_dp) ELSE 0.0_dp
+  IF (max_val > 0.0_dp) THEN
+    phase_term = beta2 * max_val
+  ELSE
+    phase_term = 0.0_dp
+  END IF
   
   exp_arg = -gamma * (temp - T0)
   IF (exp_arg > 700.0_dp) THEN
@@ -1649,7 +1653,11 @@ FUNCTION getSpecificEnthalpy(model, n, temp) RESULT(enthalpy)
   ELSE
     exp_val = EXP(exp_arg)
     denom = 1.0_dp + exp_val
-    sigmoid_term = beta3 / denom IF (denom > 1.0e-300_dp) ELSE beta3
+    IF (denom > 1.0e-300_dp) THEN
+      sigmoid_term = beta3 / denom
+    ELSE
+      sigmoid_term = beta3
+    END IF
   END IF
   
   bracket_sum = linear_term + phase_term + sigmoid_term + const_offset
