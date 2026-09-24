@@ -1214,6 +1214,11 @@ with tab_generate:
         mat_1_melting_minus = mat_1_melting - mushy_width
         mat_1_melting_plus = mat_1_melting + mushy_width
         
+        # === FIX: Explicitly define latent_check variable for use in f-string below ===
+        # (Previously only the substitutions dict had this value, causing NameError
+        #  when the f-string referenced {latent_check} directly.)
+        latent_check = 'True' if latent_release else 'False'
+        
         substitutions = {
             'project_name': project_name, 'author': author, 'date_str': date_str,
             'mesh_name': mesh_name, 'results_dir': results_dir,
@@ -1232,7 +1237,7 @@ with tab_generate:
             'bc_fixed_len': len(bc_fixed), 'bc_conv_len': len(bc_conv), 'bc_temp_len': len(bc_temp),
             'bc_fixed_idx': bc_fixed_idx, 'bc_conv_idx': bc_conv_idx, 'bc_temp_idx': bc_temp_idx, 
             'heat_face_idx': heat_face_idx, 'htc_value': htc_value,
-            'phase_model': phase_model, 'latent_check': 'True' if latent_release else 'False',
+            'phase_model': phase_model, 'latent_check': latent_check,
         }
         
         if heat_type == "Flat-Top (Super-Gaussian)":
